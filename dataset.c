@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 
 /**
  * \fn int iris_class(char *label)
@@ -33,7 +34,7 @@ int iris_class(char *label)
 
 double *get_vector(char *str, char *delim, int vsize, char **label)
 {
-    double *vect = calloc(vsize, sizeof *vect);
+    double *vect = (double *) calloc(vsize, sizeof *vect);
     char *save_ptr = NULL, *token = NULL, *str1 = NULL, *endptr = NULL;
     int ivec = 0;
     for (ivec = 0, str1 = str; ivec < vsize; ++ivec, str1 = NULL)
@@ -106,7 +107,7 @@ dataset_t *dataset(data_property_t *properties)
     dataset_t *db = (dataset_t *)malloc(sizeof *db);
     db->vsize = properties->vsize;
     db->db_size = properties->db_size;
-    db->data = calloc(db->db_size, sizeof *db->data);
+    db->data = (struct data_t *) calloc(db->db_size, sizeof *db->data);
     struct data_t *data = db->data;
     FILE *db_file = fopen(properties->filename, "r");
     assert(db_file);

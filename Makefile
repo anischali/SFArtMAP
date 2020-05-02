@@ -1,9 +1,9 @@
-CC = gcc
+CC = g++.exe
 RM = rm -f
 # déclaration des options du compilateur
-CFLAGS = -Wall -O3 -I. $(shell sdl2-config --cflags)
+CFLAGS = -Wall -I.
 CPPFLAGS = 
-LDFLAGS = -lm -lGL4Dummies $(shell sdl2-config --libs) -lSDL2_image
+LDFLAGS = -lm -stdlib=libstdc++
 # définition des fichiers et dossiers
 PROGNAME = som
 VERSION = 1.0
