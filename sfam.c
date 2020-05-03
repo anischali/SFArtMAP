@@ -117,7 +117,7 @@ void sfam_learn(sfam_t *map, dataset_t *db)
                 if (prototypes[winner].label == -1)
                 {
                     commit_class(&prototypes[winner], data[index[idata]], vsize);
-                    map->prototype_index++;
+                    map->prototype_index += (map->prototype_index < map->prototype_size) ? 1 : 0;
                     prototypes[map->prototype_index].weights = add_uncomitted(vsize, 0.9);
                     prototypes[map->prototype_index].label = -1;
                     winner = -1;
@@ -256,16 +256,16 @@ void print_clusters(sfam_t *map, dataset_t *db)
     int vsize = map->params->vsize;
     for (int iclust = 0; iclust < map->prototype_index; ++iclust)
     {
-        fprintf(stdout, "%sThe subclass contains %d vectors with prototype vector of ", color[map->clusters->labels[iclust]], map->clusters->csizes[iclust]);
+        fprintf(stdout, "The subclass contains %d vectors with prototype vector of ",  map->clusters->csizes[iclust]);
         print_vect(map->clusters->prototypes[iclust], vsize, db->data[map->clusters->datas[iclust][0]].label);
         fprintf(stdout, "\n");
         for (int idata = 0; idata < map->clusters->csizes[iclust]; ++idata)
         {
             int idx = map->clusters->datas[iclust][idata];
-            fprintf(stdout, "%s\t\t", color[db->data[idx].ilabel]);
+            fprintf(stdout, "\t\t");
             print_vect(db->data[idx].vector, vsize, db->data[idx].label);
         }
-        fprintf(stdout, "%s\n\n", DEFAULT_PRINT);
+        fprintf(stdout, "\n\n");
     }
     fprintf(stdout, "Number of classes is: %d\n", map->prototype_index);
     fprintf(stdout, "Error percentage: %.2f\n", percent);

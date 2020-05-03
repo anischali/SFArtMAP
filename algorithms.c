@@ -5,7 +5,14 @@
 #include <sys/time.h>
 #else
 #include <time.h>
-#include<WinSock2.h>
+#include <winsock.h>
+int gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+
+    tv->tv_sec = time(NULL);
+    tv->tv_usec = 0L;
+    return 0;
+}
 #endif
 
 void init_all(algorithms_t *algos)
@@ -38,11 +45,12 @@ static double get_time_diff(struct timeval b, struct timeval e)
     return (double) mse - msb;
 }
 
+
 void time_compar(algorithms_t *algos)
 {
     struct timeval b_som, b_sfam, e_som, e_sfam;
     double d_som, d_sfam;
-    gettimeofday(&b_som, NULL);
+    gettimeofday(&b_som, NULL);   
     algos->som.learn(&algos->som, algos->databases[SOM_DB]);
     gettimeofday(&e_som, NULL);
     d_som = get_time_diff(b_som, e_som);

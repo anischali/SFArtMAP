@@ -1,9 +1,9 @@
-CC = g++.exe
+CC = gcc
 RM = rm -f
 # déclaration des options du compilateur
-CFLAGS = -Wall -I.
+CFLAGS = -Wall -I. -g
 CPPFLAGS = 
-LDFLAGS = -lm -stdlib=libstdc++
+LDFLAGS = -lm
 # définition des fichiers et dossiers
 PROGNAME = som
 VERSION = 1.0

@@ -5,6 +5,33 @@
 #include <assert.h>
 #include <stdlib.h>
 
+
+#if defined(_WIN32) && !(defined(__unix__) || defined(__unix))
+#define MAX_LINE_SIZE 4096
+ssize_t getline(char **line, size_t *size, FILE *stream)
+{
+    int count = -1;
+    char buffer[MAX_LINE_SIZE] = {0};
+    char c;
+    while (((c = getc(stream)) != EOF) && count < MAX_LINE_SIZE)
+    {
+        buffer[++count] = c;     
+        if (c == '\n')
+        {
+            break;
+        }
+    }
+    if (count > 0)
+    {
+        *line = malloc((count+1) * sizeof *line); 
+        *line = strncpy(*line, buffer, count+1);
+    }
+    return count;
+}
+
+#endif
+
+
 /**
  * \fn int iris_class(char *label)
  * \brief Permet de donner un entier pour les classes d'iris
@@ -113,7 +140,7 @@ dataset_t *dataset(data_property_t *properties)
     assert(db_file);
     char *line = NULL;
     size_t len = 0;
-    ssize_t nread;
+    ssize_t nread = -1;
     int idata = 0, vsize = db->vsize, db_size = db->db_size, norm_type = properties->norm_type;
     detrmine_norm(db, norm_type);
     double (*norm)(double *, int) = db->norm_func;
@@ -170,6 +197,7 @@ void print_dataset(dataset_t *db)
     int vsize = db->vsize, db_size = db->db_size;
     for (int idata = 0; idata < db_size; ++idata)
     {
+        printf("%d : ", data[idata].ilabel);
         print_vect(data[idata].vector, vsize, data[idata].label);
     }
 }

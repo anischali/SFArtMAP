@@ -195,7 +195,8 @@ void tag_map(som_t *som, dataset_t *db)
     struct data_t *data = db->data;
     for (int imap = 0; imap < map_size; ++imap)
     {
-        min = 1000.0;
+        min = 1e15;
+        data_idx = -1;
         for (int idata = 0; idata < db_size; ++idata)
         {
             dist = data_dist(data[idata].vector, map[imap].weights, vsize);
@@ -240,9 +241,9 @@ void print_map(som_t *som)
     {
         for (int iw = 0; iw < width; ++iw)
         {
-            fprintf(stdout," %s%d", color[map[ih * width + iw].label], map[ih * width + iw].label);
+            printf("%d ", map[ih * width + iw].label);
         }
-        fprintf(stdout,"%s\n", DEFAULT_PRINT);
+        printf("\n");
     }
     fprintf(stdout,"\n\nError percentage: %.2f\n", som->error_percent);
     fprintf(stdout, "Number of epoches are: %d\n",som->params->niter);
